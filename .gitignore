@@ -1,0 +1,24 @@
+# Fichiers IDEA
+*.ipr
+*.iws
+*.iml
+.idea/
+
+## Fichiers d'Eclipse
+.project
+.settings/
+.classpath
+
+# Fichiers de compilation projet
+test-classes/
+target/
+*.class
+src/main/webapp/VegaBO/
+src/main/webapp/WEB-INF/classes/
+src/main/webapp/WEB-INF/deploy/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+/bin

@@ -3,22 +3,46 @@
 <head>
     <title>Restaurants</title>
 
-    <script src="js/jquery.js"></script>
-    <script src="js/bootstrap.js"></script>
+    <script src="js/lib/jquery.js"></script>
+    <script src="js/lib/bootstrap.js"></script>
 
-    <script src="js/angular.min.js"></script>
-    <script src="js/angular-resource.min.js"></script>
+    <script src="js/lib/angular.min.js"></script>
+    <script src="js/lib/angular-resource.min.js"></script>
+
+    <!-- Scripts AngularJS -->
+    <script src="js/controller/restaurantsCtrl.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/bootstrap-responsive.css">
-    <link rel="stylesheet" href="css/main.css">
 </head>
 <body>
-    <div>
+    <div ng-controller="restaurantsCtrl">
         <label>Name:</label>
         <input type="text" ng-model="yourName" placeholder="Enter a name here">
         <hr>
         <h1>Hello {{yourName}}!</h1>
+
+        <table class="table table-bordered table-striped">
+            <caption>
+                <h4>Mes restaurants</h4>
+            </caption>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="rest in restaurants">
+                    <td>{{rest.id}}</td>
+                    <td>{{rest.name}}</td>
+                    <td>{{rest.address}}</td>
+                    <td>{{rest.description}}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

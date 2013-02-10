@@ -25,6 +25,7 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="OutgoingsMonitor" />
+        <module name="Restaurants" />
       </profile>
     </annotationProcessing>
   </component>

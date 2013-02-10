@@ -15,7 +15,7 @@ function restaurantsCtrl($scope) {
         {id:2, name:'Quick', address:'Centre Commercial les 4 Temps 92300 Courbevoie', description:'Fast-food, burgers, frites'}];
 
     $scope.addRestaurant = function() {
-        $scope.restaurants.push({id:$scope.nextId, name:$scope.nextName, address:$scope.nextAddress, description:$scope.nextDescription});
+        $scope.restaurants.push({id:$scope.nextId, name:$scope.newName, address:$scope.newAddress, description:$scope.newDescription});
         $scope.nextId ++;
     };
 }

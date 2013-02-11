@@ -10,28 +10,44 @@
 
 	<properties>
 		<!-- GAE version -->
-		<gae.version>1.7.3</gae.version>
+		<gae.version>1.7.4</gae.version>
 		<!-- Encoding -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<dependencies>
-		<!-- Spring MVC Dependencies -->
-		<dependency>
+        
+		<!-- Spring MVC Dependency -->
+        <dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>3.1.1.RELEASE</version>
+			<version>3.2.1.RELEASE</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>3.1.1.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>3.1.1.RELEASE</version>
+        </dependency>
+
+        <!-- Jackson (JSON) Dependency -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.11</version>
+			<version>1.9.12</version>
 		</dependency>
+
+        <!-- Objectify Dependency -->
 		<dependency>
 			<groupId>com.googlecode.objectify</groupId>
 			<artifactId>objectify</artifactId>
 			<version>4.0b1</version>
             <scope>provided</scope>
 		</dependency>
+
 		<!-- GAE libraries for local testing as described here: http://code.google.com/appengine/docs/java/howto/unittesting.html -->
 		<dependency>
 			<groupId>com.google.appengine</groupId>
@@ -39,8 +55,16 @@
 			<version>${gae.version}</version>
 			<scope>test</scope>
 		</dependency>
-	</dependencies>
-	<build>
+
+        <!-- Guava Dependency -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>r09</version>
+        </dependency>
+    </dependencies>
+
+    <build>
 		<plugins>
 			<plugin>
 				<groupId>net.kindleit</groupId>

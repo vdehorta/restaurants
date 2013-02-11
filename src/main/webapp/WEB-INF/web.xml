@@ -1,21 +1,24 @@
-<!DOCTYPE web-app PUBLIC
-        "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-        "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 
 <web-app>
-    <display-name>Restaurants</display-name>
 
-    <!--<servlet>
-        <servlet-name>articleServlet</servlet-name>
-        <servlet-class>com.vdehorta.newsletter.ArticleServlet</servlet-class>
-    </servlet>
+	<!-- Servlets -->
+	<servlet>
+		<servlet-name>RestaurantSpringServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>0</load-on-startup>
+	</servlet>
 
-    <servlet-mapping>
-        <servlet-name>articleServlet</servlet-name>
-        <url-pattern>/article</url-pattern>
-    </servlet-mapping>-->
+	<servlet-mapping>
+		<servlet-name>RestaurantSpringServlet</servlet-name>
+		<url-pattern>/restaurant/*</url-pattern>
+	</servlet-mapping>
 
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
 </web-app>

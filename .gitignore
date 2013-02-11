@@ -2,7 +2,7 @@
 *.ipr
 *.iws
 *.iml
-.idea/
+.idea
 
 ## Fichiers d'Eclipse
 .project

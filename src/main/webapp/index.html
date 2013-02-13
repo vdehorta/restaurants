@@ -1,135 +1,40 @@
 <!DOCTYPE html>
-<html ng-app>
+
+<html>
+
 <head>
     <title>Restaurants</title>
 
     <script src="js/lib/jquery.js"></script>
     <script src="js/lib/bootstrap.js"></script>
 
-    <script src="js/lib/angular.min.js"></script>
-    <script src="js/lib/angular-resource.min.js"></script>
-
-    <!-- Scripts AngularJS -->
-    <script src="js/controller/restaurantsCtrl.js"></script>
-
     <!-- Google Places -->
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
 
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/bootstrap-responsive.css">
+    <!-- Script JS -->
+    <script src="js/controller/restaurantsCtrl.js"></script>
 
+    <link rel="stylesheet" href="css/bootstrap.css"/>
+    <link rel="stylesheet" href="css/bootstrap-responsive.css"/>
+    <link rel="stylesheet" href="css/restaurants.css"/>
 
-    <script>
-        var map;
-        var infowindow;
-
-        function initialize() {
-        var bondy = new google.maps.LatLng(48.9060080, 2.4818750);
-
-        map = new google.maps.Map(document.getElementById('map'), {
-        mapTypeId: google.maps.MapTypeId.ROADMAP,
-        center: bondy,
-        zoom: 15
-        });
-
-        var request = {
-        location: bondy,
-        radius: 1000,
-        types: ['restaurant']
-        };
-
-        infowindow = new google.maps.InfoWindow();
-
-        var service = new google.maps.places.PlacesService(map);
-        service.nearbySearch(request, callback);
-        }
-
-        function callback(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-        createMarker(results[i]);
-        }
-        }
-        }
-
-        function createMarker(place) {
-        var placeLoc = place.geometry.location;
-        var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
-        });
-
-        google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
-        });
-        }
-
-        google.maps.event.addDomListener(window, 'load', initialize);
-    </script>
 </head>
-<body>
-<div ng-controller="restaurantsCtrl">
+    <body>
+        <div>
+            <div class="fluid-row bloc1">
+                <div id="map_canvas" class="span8 offset2 map_canvas_medium"></div>
+            </div>
 
-    <div class="fluid-row">
+            <div class="fluid-row bloc1">
 
-        <div class="span7">
-
-            <h3>My restaurants</h3>
-
-            <table class="table table-bordered table-striped">
-                <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Description</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="rest in restaurants">
-                    <td>{{rest.id}}</td>
-                    <td>{{rest.name}}</td>
-                    <td>{{rest.address}}</td>
-                    <td>{{rest.description}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="span5">
-
-            <h3>New restaurant</h3>
-
-            <form class="form-horizontal well" ng-submit="addRestaurant()">
-
-                <div class="control-group">
-
-
-                    <label class="control-label" for="name">Name :</label>
-                    <controls>
-                        <input type="text" placeholder="Name of the restaurant" ng-model="newName" name="name">
-                    </controls>
-
-                    <label class="control-label" for="address">Address :</label>
-                    <controls>
-                        <input type="text" placeholder="Postal address" ng-model="newAddress" name="address">
-                    </controls>
-
-                    <label class="control-label" for="description">Description :</label>
-                    <controls>
-                        <input type="text" placeholder="Small description" ng-model="newDescription" name="description">
-                    </controls>
-
-                    <button type="submit" class="btn btn-primary" >Add</button>
+                <div class="span7">
+                    <h3>My Restaurants</h3>
                 </div>
-            </form>
-        </div>
 
-    </div>
-</div>
-<div class="fluid-row">
-    <div class="span12" id="map"></div>
-</div>
-</body>
+                <div class="span5">
+                    <h3>New restaurant</h3>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>

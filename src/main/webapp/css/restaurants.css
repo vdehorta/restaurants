@@ -1,0 +1,15 @@
+/* Fix the displaying of maps infowindows (due to conflict between bootstrap and maps APIs) */
+img[src*="gstatic.com/"], img[src*="googleapis.com/"]  {
+    max-width: 99999px;
+}
+
+.map_canvas_medium {
+    width: 66%;
+    height: 400px;
+}
+
+.bloc1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+

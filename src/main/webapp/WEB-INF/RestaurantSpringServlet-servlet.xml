@@ -13,6 +13,5 @@
 	<context:component-scan base-package="com.vdehorta.restaurants.server.controller" />
  	<context:component-scan base-package="com.vdehorta.restaurants.server.service" />
  	<context:component-scan base-package="com.vdehorta.restaurants.server.dao" />
-	
- 
+    <context:component-scan base-package="com.vdehorta.restaurants.server.dao.impl" />
 </beans>

@@ -51,4 +51,8 @@ public class RestaurantController {
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		new ObjectMapper().writeValue(response.getOutputStream(), null);
 	}
+
+    public void setRestaurantService(RestaurantService service) {
+        this.restaurantService = service;
+    }
 }

@@ -13,21 +13,21 @@ public class RestaurantService {
 	Logger log = Logger.getLogger(this.getClass().getName());
 	
 	@Autowired
-    RestaurantDAO restaurantDao;
+    RestaurantDAO restaurantDAO;
 	
 	public List<Restaurant> getAllRestaurant(){
 		log.info("SRV : Get all Restaurant");
-		return restaurantDao.listAll();
+		return restaurantDAO.listAll();
 	}
 	
 	public void addOrUpdateRestaurant(String name, String address, String description){
 		log.info("SRV : Add new Restaurant");
-		restaurantDao.addOrUpdate(new Restaurant(null, name, address, description));
+		restaurantDAO.addOrUpdate(new Restaurant(null, name, address, description));
 	}
 
 	public void removeRestaurant(Long id) {
 		log.info("SRV : Remove Restaurant");
         final Restaurant restaurant = new Restaurant(id, null, null, null);
-        restaurantDao.delete(restaurant);
+        restaurantDAO.delete(restaurant);
 	}
 }

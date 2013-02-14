@@ -12,10 +12,10 @@
 		<load-on-startup>0</load-on-startup>
 	</servlet>
 
-	<servlet-mapping>
+	<!--<servlet-mapping>
 		<servlet-name>RestaurantSpringServlet</servlet-name>
 		<url-pattern>/restaurant/*</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping>-->
 
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

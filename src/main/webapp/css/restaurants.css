@@ -3,13 +3,11 @@ img[src*="gstatic.com/"], img[src*="googleapis.com/"]  {
     max-width: 99999px;
 }
 
-.map_canvas_medium {
-    width: 66%;
+.map_medium {
+    width: 40%;
     height: 400px;
 }
 
-.bloc1 {
-    margin-top: 10px;
-    margin-bottom: 10px;
+.map_accueil {
+    margin: 30px auto auto auto;
 }
-

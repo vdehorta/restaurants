@@ -1,7 +1,10 @@
 const DEFAULT_LATLNG = new google.maps.LatLng(60, 105);
-const DEFAULT_ZOOM = 15;
+const DEFAULT_ZOOM = 10;
 var map;
-var infowindow;
+var infoWindow;
+var placesService;
+var listPlaces = [];
+var total = 0;
 
 function initialize() {
 
@@ -29,29 +32,38 @@ function handleGeolocationSuccess(position) {
         position: maPosition
     });
     google.maps.event.addListener(markerGeolocation, 'click', function() {
-        infowindow.setContent("Vous êtes ici.");
-        infowindow.open(map, this);
+        infoWindow.setContent("Vous êtes ici.");
+        infoWindow.open(map, this);
     });
     /* Fin marker geolocation */
 
     var request = {
         location: maPosition,
-        radius: 1000,
+        radius: 1100,
         types: ['restaurant']
     };
 
-    infowindow = new google.maps.InfoWindow();
+    infoWindow = new google.maps.InfoWindow();
 
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, handleNearbySearchResult);
+    placesService = new google.maps.places.PlacesService(map);
+    placesService.nearbySearch(request, handleNearbySearchResult);
 }
 
-function handleNearbySearchResult(results, status) {
+function handleNearbySearchResult(results, status, pagination) {
     if (status == google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
-        }
+        listPlaces = listPlaces.concat(results);
     }
+    if (pagination.hasNextPage) { //Si il reste des résultats, on appelle la méthode "nextPage()" qui va redéclencher une pageSearch avec la mm fct de callback (handleNearbySearchResult)
+        pagination.nextPage();
+    } else {
+        for (var i = 0; i < listPlaces.length; i++, total++) {
+            createMarker(listPlaces[i]);
+        }
+
+        alert ("Nb total de places obtenues : " + total);
+        total = 0;
+    }
+
 }
 
 function createMarker(place) {
@@ -62,8 +74,8 @@ function createMarker(place) {
     });
 
     google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
-        infowindow.open(map, this);
+        infoWindow.setContent(place.name);
+        infoWindow.open(map, this);
     });
 }
 

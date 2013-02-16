@@ -6,21 +6,23 @@ var placesService;
 var listPlaces = [];
 var total = 0;
 var errorMsg;
+var requestNumber = 0;
+var markerNumber = 0;
 
 function initialize() {
 
     // Try HTML5 geolocation
     /*if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-				afficherMapRestaurants(new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-		}, function() {
-            handleNoGeolocation(true);
-        });
-    } else {
-        // Browser doesn't support Geolocation
-        handleNoGeolocation(false);
-    }*/
-	afficherMapRestaurants(new google.maps.LatLng(48.886766,2.257390));
+     navigator.geolocation.getCurrentPosition(function(position) {
+     afficherMapRestaurants(new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+     }, function() {
+     handleNoGeolocation(true);
+     });
+     } else {
+     // Browser doesn't support Geolocation
+     handleNoGeolocation(false);
+     }*/
+    afficherMapRestaurants(new google.maps.LatLng(48.886766,2.257390));
 }
 
 function afficherMapRestaurants(maPosition) {
@@ -49,10 +51,11 @@ function afficherMapRestaurants(maPosition) {
 
     placesService = new google.maps.places.PlacesService(map);
     //placesService.nearbySearch(request, handleNearbySearchResult);
-	placesService.radarSearch(request, handleRadarSearchResult);
+    placesService.radarSearch(request, handleRadarSearchResult);
 }
 
 function handleNearbySearchResult(results, status, pagination) {
+    requestNumber ++;
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         listPlaces = listPlaces.concat(results);
     }
@@ -65,51 +68,59 @@ function handleNearbySearchResult(results, status, pagination) {
 
         alert ("Nb total de places obtenues : " + total);
         total = 0;
+        alert("Nombre de requêtes au service places : " + requestNumber);
     }
 
 }
 
 function handleRadarSearchResult(results, status) {
+    requestNumber += 5;
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         alert("Nb de places récupérées avec radar : " + results.length);
     }
-	//Affichage des details de places récupérées
-	for (var i = 0; i < results.length; i++) {
-		//getDetailPlace(results[i].reference);
-		createMarker(results[i]);
-	}
+    //Affichage des details de places récupérées
+    for (var i = 0; i < results.length; i++) {
+        getDetailPlace(results[i].reference);
+        //createMarker(results[i]);
+    }
+    alert("Nombre de requêtes au service places : " + requestNumber);
 }
 
 function getDetailPlace(reference) {
-	var detailRequest = {
-		reference: reference
-	};
-	placesService.getDetails(detailRequest, displayDetailledPlace);
+    var detailRequest = {
+        reference: reference
+    };
+    placesService.getDetails(detailRequest, displayDetailledPlace);
 }
 
 function displayDetailledPlace(place, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    createMarker(place);
-  } else {
-	switch(status) {
-        case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
-        	errorMsg = "INVALID_REQUEST !";
-        break;
-        case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
-        	errorMsg = "OVER_QUERY_LIMIT !";
-        break;
-		case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
-        	errorMsg = "REQUEST_DENIED !";
-        break;
-		case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
-        	errorMsg = "UNKNOWN_ERROR !";
-        break;
-		case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
-        	errorMsg = "ZERO_RESULTS !";
-        break;
+
+    requestNumber ++;
+
+    if (status == google.maps.places.PlacesServiceStatus.OK) {
+        createMarker(place);
+    } else {
+        switch(status) {
+            case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
+                errorMsg = "INVALID_REQUEST !";
+                break;
+            case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
+                errorMsg = "OVER_QUERY_LIMIT !";
+                alert("requestNumber : "+requestNumber);
+                alert("markerNumber : "+markerNumber);
+                break;
+            case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
+                errorMsg = "REQUEST_DENIED !";
+                break;
+            case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
+                errorMsg = "UNKNOWN_ERROR !";
+                break;
+            case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
+                errorMsg = "ZERO_RESULTS !";
+                break;
+        }
+        //alert(errorMsg);
     }
-    alert(errorMsg);
-  }
 }
 
 function createMarker(place) {
@@ -119,40 +130,42 @@ function createMarker(place) {
         position: place.geometry.location
     });
 
+    markerNumber++;
+
     google.maps.event.addListener(marker, 'click', function() {
-		var content = "";
+        var content = "";
         /*content += ("Name : " + place.name + "\n");
-		content += ("types : ");
-		for (var i = 0; i < place.types.length; i++) {
-			content += (place.types[i] + ";");
-		}
-		content += "\n";
-		content +=("formatted_address : " + place.formatted_address + "\n");
-		content +=("formatted_phone_number : " + place.formatted_phone_number + "\n");
-		content +=("international_phone_number : " + place.international_phone_number + "\n");
-		content +=("icon : " + place.icon + "\n");
-		content +=("permanently_closed : " + place.permanently_closed + "\n");
-		content +=("price_level : " + place.price_level + "\n");
-        content +=("rating : " + place.rating + "\n");
-        content +=("reference : " + place.reference + "\n");
-        content +=("review_summary : " + place.review_summary + "\n");
-        content +=("url : " + place.url + "\n");
-        content +=("vicinity : " + place.vicinity + "\n");*/
+         content += ("types : ");
+         for (var i = 0; i < place.types.length; i++) {
+         content += (place.types[i] + ";");
+         }
+         content += "\n";
+         content +=("formatted_address : " + place.formatted_address + "\n");
+         content +=("formatted_phone_number : " + place.formatted_phone_number + "\n");
+         content +=("international_phone_number : " + place.international_phone_number + "\n");
+         content +=("icon : " + place.icon + "\n");
+         content +=("permanently_closed : " + place.permanently_closed + "\n");
+         content +=("price_level : " + place.price_level + "\n");
+         content +=("rating : " + place.rating + "\n");
+         content +=("reference : " + place.reference + "\n");
+         content +=("review_summary : " + place.review_summary + "\n");
+         content +=("url : " + place.url + "\n");
+         content +=("vicinity : " + place.vicinity + "\n");*/
         content +=("Name : " + place.name);
-		infoWindow.setContent(content);
+        infoWindow.setContent(content);
         infoWindow.open(map, this);
     });
 }
 
 function createMarker(place) {
-	var marker = new google.maps.Marker({
+    var marker = new google.maps.Marker({
         map: map,
         position: place.geometry.location
     });
-	google.maps.event.addListener(marker, 'click', function() {
-		var content = "";
+    google.maps.event.addListener(marker, 'click', function() {
+        var content = "";
         content +=("Lat : " + place.geometry.location.lat() + ", Lng : " + place.geometry.location.lng());
-		infoWindow.setContent(content);
+        infoWindow.setContent(content);
         infoWindow.open(map, this);
     });
 }
@@ -160,17 +173,17 @@ function createMarker(place) {
 function handleNoGeolocation(error) {
     switch(error.code) {
         case error.TIMEOUT:
-        	errorMsg = "Timeout !";
-        break;
+            errorMsg = "Timeout !";
+            break;
         case error.PERMISSION_DENIED:
             errorMsg = "Vous n’avez pas donné la permission";
-        break;
+            break;
         case error.POSITION_UNAVAILABLE:
-        	errorMsg = "La position n’a pu être déterminée";
-        break;
+            errorMsg = "La position n’a pu être déterminée";
+            break;
         case error.UNKNOWN_ERROR:
-        	errorMsg = "Erreur inconnue";
-        break;
+            errorMsg = "Erreur inconnue";
+            break;
     }
     alert(errorMsg);
 

@@ -6,8 +6,6 @@ var placesService;
 var listPlaces = [];
 var total = 0;
 var errorMsg;
-var requestNumber = 0;
-var markerNumber = 0;
 
 function initialize() {
 

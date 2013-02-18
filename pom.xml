@@ -35,7 +35,7 @@
 			<groupId>com.googlecode.objectify</groupId>
 			<artifactId>objectify</artifactId>
 			<version>4.0b1</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
 		</dependency>
 
 		<!-- GAE libraries for local testing as described here: http://code.google.com/appengine/docs/java/howto/unittesting.html -->

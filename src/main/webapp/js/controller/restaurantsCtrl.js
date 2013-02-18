@@ -1,13 +1,15 @@
-const DEFAULT_LATLNG = new google.maps.LatLng(60, 105);
+const DEFAULT_LATLNG = new google.maps.LatLng(48.886766,2.257390);
 const DEFAULT_ZOOM = 15;
+var divMap;
 var map;
-var infoWindow;
+var infoWindow = new google.maps.InfoWindow();
 var placesService;
 var listPlaces = [];
-var total = 0;
-var errorMsg;
+var errorMsg = "";
 
 function initialize() {
+
+    divMap = document.getElementById('map');
 
     // Try HTML5 geolocation
     /*if (navigator.geolocation) {
@@ -20,24 +22,16 @@ function initialize() {
      // Browser doesn't support Geolocation
      handleNoGeolocation(false);
      }*/
-    afficherMapRestaurants(new google.maps.LatLng(48.886766,2.257390));
+    afficherMapRestaurants(DEFAULT_LATLNG);
 }
 
 function afficherMapRestaurants(maPosition) {
 
     //alert ("Succès de la géolocalisation, vous êtes aux coordonnées : " + maPosition.lat() + ", " + maPosition.lng());
-    createMap(maPosition, DEFAULT_ZOOM);
+    createMap(maPosition, DEFAULT_ZOOM, false);
 
     /* Placement d'un marker à la localisation obtenue par géolocalisation */
-    var markerGeolocation = new google.maps.Marker({
-        map: map,
-        position: maPosition
-    });
-    google.maps.event.addListener(markerGeolocation, 'click', function() {
-        infoWindow.setContent("Vous &ecirc;tes ici.");
-        infoWindow.open(map, this);
-    });
-    /* Fin marker geolocation */
+    createMarker(maPosition, "Vous &ecirc;tes ici.");
 
     var request = {
         location: maPosition,
@@ -45,93 +39,37 @@ function afficherMapRestaurants(maPosition) {
         types: ['restaurant']
     };
 
-    infoWindow = new google.maps.InfoWindow();
-
     placesService = new google.maps.places.PlacesService(map);
-    //placesService.nearbySearch(request, handleNearbySearchResult);
-    placesService.radarSearch(request, handleRadarSearchResult);
+    placesService.nearbySearch(request, handleNearbySearchResult);
 }
 
 function handleNearbySearchResult(results, status, pagination) {
-    requestNumber ++;
+
     if (status == google.maps.places.PlacesServiceStatus.OK) {
         listPlaces = listPlaces.concat(results);
     }
+
     if (pagination.hasNextPage) { //Si il reste des résultats, on appelle la méthode "nextPage()" qui va redéclencher une pageSearch avec la mm fct de callback (handleNearbySearchResult)
         pagination.nextPage();
-    } else {
-        for (var i = 0; i < listPlaces.length; i++, total++) {
-            createMarker(listPlaces[i]);
+    } else { //Affichage des markers pour les places récupérées
+
+        for (var i = 0; i < listPlaces.length; i++) {
+            createMarker(listPlaces[i].geometry.location, listPlaces[i].name);
         }
 
-        alert ("Nb total de places obtenues : " + total);
-        total = 0;
-        alert("Nombre de requêtes au service places : " + requestNumber);
-    }
+        setMapVisibility(true);
 
-}
-
-function handleRadarSearchResult(results, status) {
-    requestNumber += 5;
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        alert("Nb de places récupérées avec radar : " + results.length);
-    }
-    //Affichage des details de places récupérées
-    for (var i = 0; i < results.length; i++) {
-        getDetailPlace(results[i].reference);
-        //createMarker(results[i]);
-    }
-    alert("Nombre de requêtes au service places : " + requestNumber);
-}
-
-function getDetailPlace(reference) {
-    var detailRequest = {
-        reference: reference
-    };
-    placesService.getDetails(detailRequest, displayDetailledPlace);
-}
-
-function displayDetailledPlace(place, status) {
-
-    requestNumber ++;
-
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-        createMarker(place);
-    } else {
-        switch(status) {
-            case google.maps.places.PlacesServiceStatus.INVALID_REQUEST:
-                errorMsg = "INVALID_REQUEST !";
-                break;
-            case google.maps.places.PlacesServiceStatus.OVER_QUERY_LIMIT:
-                errorMsg = "OVER_QUERY_LIMIT !";
-                alert("requestNumber : "+requestNumber);
-                alert("markerNumber : "+markerNumber);
-                break;
-            case google.maps.places.PlacesServiceStatus.REQUEST_DENIED:
-                errorMsg = "REQUEST_DENIED !";
-                break;
-            case google.maps.places.PlacesServiceStatus.UNKNOWN_ERROR:
-                errorMsg = "UNKNOWN_ERROR !";
-                break;
-            case google.maps.places.PlacesServiceStatus.ZERO_RESULTS:
-                errorMsg = "ZERO_RESULTS !";
-                break;
-        }
-        //alert(errorMsg);
+        //alert ("Nb total de places obtenues : " + listPlaces.length);
     }
 }
 
-function createMarker(place) {
-    var placeLoc = place.geometry.location;
+function createMarker(latLng, content) {
     var marker = new google.maps.Marker({
         map: map,
-        position: place.geometry.location
+        position: latLng
     });
 
-    markerNumber++;
-
     google.maps.event.addListener(marker, 'click', function() {
-        var content = "";
         /*content += ("Name : " + place.name + "\n");
          content += ("types : ");
          for (var i = 0; i < place.types.length; i++) {
@@ -149,20 +87,6 @@ function createMarker(place) {
          content +=("review_summary : " + place.review_summary + "\n");
          content +=("url : " + place.url + "\n");
          content +=("vicinity : " + place.vicinity + "\n");*/
-        content +=("Name : " + place.name);
-        infoWindow.setContent(content);
-        infoWindow.open(map, this);
-    });
-}
-
-function createMarker(place) {
-    var marker = new google.maps.Marker({
-        map: map,
-        position: place.geometry.location
-    });
-    google.maps.event.addListener(marker, 'click', function() {
-        var content = "";
-        content +=("Lat : " + place.geometry.location.lat() + ", Lng : " + place.geometry.location.lng());
         infoWindow.setContent(content);
         infoWindow.open(map, this);
     });
@@ -188,12 +112,24 @@ function handleNoGeolocation(error) {
     createMap(DEFAULT_LATLNG, DEFAULT_ZOOM); //Si impossible de géolocaliser, localisation par défaut
 }
 
-function createMap(poosition, zoom) {
-    map = new google.maps.Map(document.getElementById('map'), {
+function createMap(poosition, zoom, visibleFlag) {
+    if (visibleFlag == false) {
+        divMap.style.visibility = "hidden";
+    }
+
+    map = new google.maps.Map(divMap, {
         mapTypeId: google.maps.MapTypeId.ROADMAP,
         center: poosition,
         zoom: zoom
     });
+}
+
+function setMapVisibility(visibleFlag) {
+    if (visibleFlag == false) {
+        divMap.style.visibility = "hidden";
+    } else {
+        divMap.style.visibility = "visible";
+    }
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
